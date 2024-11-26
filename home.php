@@ -1,14 +1,19 @@
 <?php
+
+// require "database/config.php";
+require "core/Login.php";
+include "core/load.php";
+
+
 // Start the session
 session_start();
+
 if (!isset($_COOKIE['UID'])) {
   header("Location: index.php");
   die();
 }
 
-// require "database/config.php";
-require "core/Login.php";
-include "core/load.php";
+
 
 // $uid = $_COOKIE['UID'];
 if (!isset($_SESSION['UNAME'])) {
@@ -25,7 +30,8 @@ if (Login::isLoggedIn()) {
 
 if (isset($_SESSION['UNAME']) == true && empty($_SESSION['UNAME']) == false) {
   $username = $loadFromUser->checkInput($_SESSION['UNAME']);
-  // $profileId = $loadFromUser->userIdByUsername($username);
+  $user = $loadFromUser->getUserByUsername($_SESSION['UNAME']);
+  // print_r($user);
   // $profileData = $loadFromUser->getUserData($profileId);
   // $userData = $loadFromUser->getUserData($user_id);
 }
@@ -51,7 +57,8 @@ if (isset($_SESSION['UNAME']) == true && empty($_SESSION['UNAME']) == false) {
 
 <body>
   <a id="" href="logout.php">Logout</a>
-  <h2 id="demo">Welcome to Home Page <?= ucfirst($_SESSION['UNAME']) ?></h2>
+  <img src="<?= 'uploads/admin/' . $user->image ?>" alt="" style="height: 70px; width: 70px; border-radius: 50%">
+  <h2 id="demo">Welcome to Home Page <?= ucfirst($user->username) ?></h2>
 </body>
 
 </html>

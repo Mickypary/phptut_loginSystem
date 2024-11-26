@@ -5,10 +5,10 @@ session_start();
 
 require "database/config.php";
 
-// if (isset($_SESSION['username']) || isset($_COOKIE['username'])) {
-//   header("location: home.php");
-//   die();
-// }
+if (isset($_SESSION['username']) || isset($_COOKIE['username'])) {
+  header("location: home.php");
+  die();
+}
 
 
 

@@ -23,6 +23,21 @@ class Users
     return $var;
   }
 
+  public function getUserByUsername($username)
+  {
+    $stmt = $this->pdo->getConnection()->prepare("SELECT * FROM admin WHERE username = :username");
+    $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $count = $stmt->rowCount();
+    if ($count > 0) {
+      $user = $stmt->fetch(PDO::FETCH_OBJ);
+      return $user;
+    } else {
+      return false;
+    }
+  }
+
   // public function checkEmail($email)
   // {
   //   $stmt = $this->pdo->getConnection()->prepare("SELECT email FROM users WHERE email = :email");

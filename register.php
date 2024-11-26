@@ -60,15 +60,53 @@ require "database/config.php";
 if (isset($_POST['register'])) {
   $username = trim($_POST['username']);
   $password = $_POST['password'];
-  $image_url = 'ty.png';
+  $img = $_FILES['image']['name'];
+  $temp_name = $_FILES['image']['tmp_name'];
+  $filepath = "uploads/admin/{$img}";
+  move_uploaded_file($temp_name, $filepath);
+
   $hash_password = password_hash($password, PASSWORD_DEFAULT);
 
   // // prepare and bind
   $stmt = $conn->prepare("INSERT INTO admin (username,`password`,image) VALUES (?,?,?) ");
-  $stmt->bind_param("sss", $username, $hash_password, $image_url);
+  $stmt->bind_param("sss", $username, $hash_password, $img);
   $stmt->execute();
 
-  $_SESSION["username"] = $username;
+  $user_id = mysqli_insert_id($conn);
+
+
+
+  $_SESSION["UNAME"] = $username;
+
+
+  // Cookies
+  $tstrong = true;
+  $token = bin2hex(openssl_random_pseudo_bytes(64, $tstrong));
+
+  // token data for insert into token table
+  $sha_token = sha1($token);
+  $user_id = $user_id;
+
+  $stmt = $conn->prepare("INSERT INTO token (token,`user_id`) VALUES (?,?) ");
+  $stmt->bind_param("si", $sha_token, $user_id);
+  $stmt->execute();
+
+  $arr_cookie_options = array(
+    // 'expires' => time() + 60 * 60 * 24 * 30,
+    'expires' => time() + 60 * 60 * 24 * 7,
+    'path' => '/',
+    'domain' => NULL, // leading dot for compatibility or use subdomain
+    'secure' => NULL,     // true or false
+    'httponly' => true,    // or false
+    // 'samesite' => 'None' // None || Lax  || Strict
+  );
+
+  setcookie('UID', $token, $arr_cookie_options);
+
+
+
+
+
   header("Location: home.php");
 
   $stmt->close();

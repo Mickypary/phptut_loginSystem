@@ -31,6 +31,11 @@ if (Login::isLoggedIn()) {
 if (isset($_SESSION['UNAME']) == true && empty($_SESSION['UNAME']) == false) {
   $username = $loadFromUser->checkInput($_SESSION['UNAME']);
   $user = $loadFromUser->getUserByUsername($_SESSION['UNAME']);
+  if ($user) {
+  } else {
+    echo "User not found!";
+    die();
+  }
   // print_r($user);
   // $profileData = $loadFromUser->getUserData($profileId);
   // $userData = $loadFromUser->getUserData($user_id);

@@ -3,16 +3,19 @@
 // Start the session
 session_start();
 
-$cookie = setcookie('username', $_SESSION['username'], 60);
+// $cookie = setcookie('username', $_SESSION['UNAME'], 60);
 
 // remove all session variables
 // session_unset();
-unset($_SESSION['username']);
-unset($_SESSION['password']);
+// unset($_COOKIE['UID']);
+setcookie('UID');
+
+// unset($_SESSION['username']);
+// unset($_SESSION['password']);
 
 
 // destroy the session
-// session_destroy();
+session_destroy();
 
 
 header("Location: index.php");

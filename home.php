@@ -16,7 +16,7 @@ if (!isset($_SESSION['UNAME'])) {
 }
 
 if (Login::isLoggedIn()) {
-  echo 'loggedin';
+  // echo 'loggedin';
   $user_id = Login::isLoggedIn();
 } else {
   header("Location: index.php");

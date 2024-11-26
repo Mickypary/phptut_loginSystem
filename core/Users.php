@@ -38,6 +38,20 @@ class Users
     }
   }
 
+  public function checkUsername($username)
+  {
+    $stmt = $this->pdo->getConnection()->prepare("SELECT username FROM admin WHERE username = :username");
+    $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $count = $stmt->rowCount();
+    if ($count > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // public function checkEmail($email)
   // {
   //   $stmt = $this->pdo->getConnection()->prepare("SELECT email FROM users WHERE email = :email");
